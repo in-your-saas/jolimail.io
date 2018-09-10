@@ -1,0 +1,132 @@
+<html lang=""><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><title>jolimail</title><meta name="description" content="Beautiful responsive emails, designed instantly. Design, copy, send."/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><link rel="icon" href="favicon.ico"/><link rel="stylesheet" href="main.532ec654.css"/><link href="https://fonts.googleapis.com/css?family=Patua+One|Open+Sans:400,600,700" rel="stylesheet"/></head><body><div style="font-family:&#x27;Open Sans&#x27;, Arial, serif;font-size:15px"><div><header class="header" style="color:rgba(82,85,87,1);font-weight:400"><div class="wr"><a id="headerLogo" href="index.html" class="header__logo" style="font-weight:400">jolimail</a><nav id="headerNav" class="header__nav"><a href="pricing.html" class="btn btn--c btn--plain" style="color:rgba(37,208,255,1)">Pricing</a><a href="https://github.com/in-your-saas/catapulte" class="btn btn--c btn--plain" style="color:rgba(37,208,255,1)">Documentation</a><div class="header__navCtas"><a href="https://app.jolimail.io" class="btn btn--c btn--primary" style="color:rgba(255,255,255,1);background-color:rgba(37,208,255,1)">Sign Up</a></div></nav><nav id="headerMenu" class="header__nav header__nav--hidden"><button id="headerMenuButton" class="btn btn--c btn--primary" style="color:rgba(255,255,255,1);background-color:rgba(37,208,255,1)">Menu</button></nav><nav id="headerDrawer" class="headerMenu"><div id="headerDrawerBackdrop" class="headerMenu__backdrop"></div><ul class="headerMenu__links"><li><a href="pricing.html" class="btn btn--c btn--plain" style="color:rgba(37,208,255,1)">Pricing</a></li><li><a href="https://github.com/in-your-saas/catapulte" class="btn btn--c btn--plain" style="color:rgba(37,208,255,1)">Documentation</a></li><li><a href="https://app.jolimail.io" class="btn btn--c btn--primary" style="color:rgba(255,255,255,1);background-color:rgba(37,208,255,1)">Sign Up</a></li></ul><button id="headerDrawerClose" class="headerMenu__close btn">Close</button></nav></div><script>(function() {
+  var buffer = 10;
+  var margin = 60 + 40 + buffer;
+  // button
+  var button = document.getElementById('headerMenuButton');
+  var buttonWrapper = document.getElementById('headerMenu');
+  // drawer
+  var drawer = document.getElementById('headerDrawer');
+  var drawerBackdrop = document.getElementById('headerDrawerBackdrop');
+  var drawerClose = document.getElementById('headerDrawerClose');
+  // header UI
+  var logo = document.getElementById('headerLogo');
+  var nav = document.getElementById('headerNav');
+  var logoWidth = logo.offsetWidth;
+  var navWidth = nav.offsetWidth;
+
+  var determineVisibility = function() {
+    var parent = window.innerWidth;
+    if (logoWidth + navWidth > parent - margin) {
+      nav.classList.add('header__nav--hidden');
+      buttonWrapper.classList.add('headerMenu--visible');
+    } else {
+      nav.classList.remove('header__nav--hidden');
+      buttonWrapper.classList.remove('headerMenu--visible');
+    }
+  };
+
+  var showDrawer = function() {
+    drawer.classList.add('headerMenu--visible');
+  };
+
+  var hideDrawer = function() {
+    drawer.classList.remove('headerMenu--visible');
+  };
+
+  button.onclick = showDrawer;
+  drawerBackdrop.onclick = hideDrawer;
+  drawerClose.onclick = hideDrawer;
+
+  window.addEventListener('resize', determineVisibility);
+  determineVisibility();
+})();
+</script></header></div><div><div class="section" style="background-color:rgba(214,251,255,1)"><div class="wr"><h2 class="section__title center" style="color:rgba(82,85,87,1);font-weight:400;font-family:&#x27;Patua One&#x27;, monospace">Contact us</h2><h3 class="section__subtitle center" style="color:rgba(174,175,176,1);font-weight:400">Want more than 10 templates ? Any question ?</h3><form class="contact" id="contact" data-siteid="794dev4t14ze"><div class="contact__item"><label style="color:rgba(174,175,176,1);font-weight:600">Full Name</label><input type="text" id="contactName" placeholder="Jane Doe" style="color:rgba(82,85,87,1);font-weight:400"/></div><div class="contact__row"><div class="contact__item"><label style="color:rgba(174,175,176,1);font-weight:600">Email Address</label><input type="email" id="contactEmail" placeholder="jane.doe@mail.com" style="color:rgba(82,85,87,1);font-weight:400"/></div><div class="contact__item"><label style="color:rgba(174,175,176,1);font-weight:600">Phone (Optional)</label><input type="text" id="contactPhone" placeholder="(123) 456-7890" style="color:rgba(82,85,87,1);font-weight:400"/></div></div><div class="contact__item"><label style="color:rgba(174,175,176,1);font-weight:600">Your Message</label><textarea id="contactMessage" style="color:rgba(82,85,87,1);font-weight:400"></textarea></div><div id="contactError" class="contact__error"></div><button id="contactSubmit" class="btn btn--c btn--primary btn--large" style="color:rgba(255,255,255,1);background-color:rgba(37,208,255,1)">Send Message</button></form><script>(function() {
+  function bindForm() {
+    var form = document.getElementById('contact');
+    form.addEventListener('submit', handleSubmit);
+
+    var btn = document.getElementById('contactSubmit');
+    btn.addEventListener('click', handleSubmit);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log('submitted form');
+
+    var data = {
+      path: '/contact',
+      siteId: document.getElementById('contact').getAttribute('data-siteid'),
+      name: document.getElementById('contactName').value,
+      email: document.getElementById('contactEmail').value,
+      phone: document.getElementById('contactPhone').value,
+      message: document.getElementById('contactMessage').value
+    };
+
+    if (!validateData(data)) {
+      return;
+    }
+
+    document.getElementById('contactSubmit').classList.add('btn--loading');
+
+    sendData(data);
+  }
+
+  function sendData(data) {
+    var request = new XMLHttpRequest();
+    request.open('POST', 'https://api.landen.co/public/contact', true);
+    request.setRequestHeader(
+      'Content-Type',
+      'application/x-www-form-urlencoded; charset=UTF-8'
+    );
+    request.send(JSON.stringify(data));
+
+    request.onload = function() {
+      document.getElementById('contactSubmit').classList.remove('btn--loading');
+      if (this.status >= 200 && this.status < 400) {
+        // success handling
+        clearData();
+        document.getElementById('contactSubmit').classList.add('btn--success');
+        setTimeout(function() {
+          document
+            .getElementById('contactSubmit')
+            .classList.remove('btn--success');
+        }, 2000);
+      } else {
+        console.log('error');
+      }
+    };
+
+    request.onerror = function() {
+      document.getElementById('contactError').innerText =
+        'A network error occured. Please make sure you are connected to the internet.';
+    };
+  }
+
+  function clearData() {
+    document.getElementById('contactName').value = '';
+    document.getElementById('contactEmail').value = '';
+    document.getElementById('contactPhone').value = '';
+    document.getElementById('contactMessage').value = '';
+  }
+
+  function validateData(data) {
+    var error = false;
+    if (data.name.length < 2) {
+      error = 'Please enter your name';
+    } else if (data.email.length < 6) {
+      error = 'Please enter your email address';
+    } else if (data.message.length < 4) {
+      error = 'Please enter a message';
+    }
+
+    if (error) {
+      document.getElementById('contactError').innerText = error;
+    } else {
+      document.getElementById('contactError').innerText = '';
+    }
+
+    return error === false;
+  }
+  bindForm();
+})();
+</script></div></div></div><div><footer class="section section--footer" style="background-color:#fafafa"><div class="wr"><div class="footer" style="color:rgba(174,175,176,1);font-weight:400"><div class="footer__primary"><span>© 2019 jolimail</span><nav class="footer__linkRow"><a href="https://inyoursaas.io">In Your Saas</a></nav></div><ul class="footer__social"><li><a href="https://twitter.com/jolimailsaas" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z" fill="rgba(174,175,176,1)"></path></svg></a></li></ul></div></div></footer></div></div></body></html>
